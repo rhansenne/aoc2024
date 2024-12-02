@@ -9,7 +9,7 @@ def isSafe(rep):
         return True
     return False
 
-safe=0;
+safe=0
 for rep in [l.split() for l in open('input.txt', 'r').readlines()]:
     rep = [int(i) for i in rep]
     if isSafe(rep):
