@@ -1,51 +1,34 @@
 import numpy as np
+map = np.array([[*l.strip()] for l in open('input.txt', 'r').readlines()])
+pos=set()
 
 def find(x):
     return tuple([np.where(map==x)[0][0],np.where(map==x)[1][0]])
 
-map = np.array([[*l.strip()] for l in open('input.txt', 'r').readlines()])
-pos=set()
-co=None
+def exitmap(d,next_d,dx,dy):
+    co = find(d)
+    pos.add(co)            
+    if 0<=co[0]+dx<len(map) and 0<=co[1]+dy<len(map[0]):
+        if map[co[0]+dx,co[1]+dy]=='.':
+            map[co[0],co[1]]='.'
+            map[co[0]+dx,co[1]+dy]=d
+        else:
+            map[co[0],co[1]]=next_d
+        return False
+    else:
+        return True
+
 while True:
     if '^' in map:
-        co = find('^')
-        if co[0]-1>=0:
-            if map[co[0]-1,co[1]]=='.':
-                map[co[0],co[1]]='.'
-                map[co[0]-1,co[1]]='^'
-            else:
-                map[co[0],co[1]]='>'
-        else:
+        if exitmap('^','>',-1,0):
             break
     elif '>' in map:
-        co = find('>')
-        if co[1]+1<len(map[0]):
-            if map[co[0],co[1]+1]=='.':
-                map[co[0],co[1]]='.'
-                map[co[0],co[1]+1]='>'
-            else:
-                map[co[0],co[1]]='v'
-        else:
-            break  
-    elif 'v' in map:
-        co = find('v')
-        if co[0]+1<len(map):
-            if map[co[0]+1,co[1]]=='.':
-                map[co[0],co[1]]='.'
-                map[co[0]+1,co[1]]='v'
-            else:
-                map[co[0],co[1]]='<'
-        else:
-            break  
-    elif '<' in map:
-        co = find('<')
-        if co[1]-1>=0:
-            if map[co[0],co[1]-1]=='.':
-                map[co[0],co[1]]='.'
-                map[co[0],co[1]-1]='<'
-            else:
-                map[co[0],co[1]]='^'
-        else:
+        if exitmap('>','v',0,1):
             break
-    pos.add(co)
+    elif 'v' in map:
+        if exitmap('v','<',1,0):
+            break
+    elif '<' in map:
+        if exitmap('<','^',0,-1):
+            break
 print(len(pos)+1)
