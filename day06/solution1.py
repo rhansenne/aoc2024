@@ -2,11 +2,8 @@ import numpy as np
 map = np.array([[*l.strip()] for l in open('input.txt', 'r').readlines()])
 pos=set()
 
-def find(x):
-    return tuple([np.where(map==x)[0][0],np.where(map==x)[1][0]])
-
 def exitmap(d,next_d,dx,dy):
-    co = find(d)
+    co = tuple([np.where(map==d)[0][0],np.where(map==d)[1][0]])
     pos.add(co)            
     if 0<=co[0]+dx<len(map) and 0<=co[1]+dy<len(map[0]):
         if map[co[0]+dx,co[1]+dy]=='.':
