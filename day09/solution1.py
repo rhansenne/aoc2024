@@ -21,9 +21,5 @@ while firstSpace < lastBlock: #move blocks
     if firstSpace < lastBlock:
         disk[firstSpace], disk[lastBlock] = disk[lastBlock], disk[firstSpace]
 
-checksum=0
-for i in range(0,len(disk)): #calculate checksum
-    if disk[i]==-1:
-        break
-    checksum+=i*disk[i]
+checksum=sum([i*disk[i] for i in range(0,len(disk)) if disk[i]>-1])
 print(checksum)
