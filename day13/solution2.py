@@ -10,7 +10,7 @@ for l in open('input.txt', 'r').readlines():
     elif 'B' in l:
         bx,by=int(co[0]),int(co[1])
     elif 'P' in l:
-        px,py=int(co[0]),int(co[1])
+        px,py=int(co[0])+10000000000000,int(co[1])+10000000000000
         sol = solve([a*ax+b*bx-px, a*ay+b*by-py], [a, b])
         if sol[a].is_integer and sol[b].is_integer:
             tokens+=3*sol[a]+sol[b]
