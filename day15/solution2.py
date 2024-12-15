@@ -13,12 +13,10 @@ def move_box_vert(i,j,di): # recursively move boxes vertically
         if not (move_box_vert(i+di,j-1,di) and move_box_vert(i+di,j+1,di)):
             map=map_before_move #undo any moves
             return False
-    elif map[i+di][j]==']' and not move_box_vert(i+di,j-1,di):
-        return False
-    elif map[i+di][j]=='[' and not move_box_vert(i+di,j,di):
-        return False
-    elif map[i+di][j+1]=='[' and not move_box_vert(i+di,j+1,di):
-        return False                                           
+    else:
+        for dj in (-1,0,1):        
+            if map[i+di][j+dj]=='[' and not move_box_vert(i+di,j+dj,di):
+                return False
     map[i][j],map[i][j+1]='.','.'            
     map[i+di][j],map[i+di][j+1]='[',']'
     return True              
@@ -31,14 +29,14 @@ def move_box(i,j,dir): # recursively move boxes
         case 'v':
             return move_box_vert(i,j,1)           
         case '>':
-            if map[i][j+2]=='#' or (map[i][j+2]=='[' and not move_box(i,j+2,dir)):
-                return False
-            map[i][j],map[i][j+1],map[i][j+2]='.','[',']'            
+            if map[i][j+2]=='.' or (map[i][j+2]=='[' and move_box(i,j+2,dir)):
+                map[i][j],map[i][j+1],map[i][j+2]='.','[',']'  
+                return True          
         case '<':
-            if map[i][j-1]=='#' or (map[i][j-1]==']' and not move_box(i,j-2,dir)):
-                return False
-            map[i][j-1],map[i][j],map[i][j+1]='[',']','.'            
-    return True
+            if map[i][j-1]=='.' or (map[i][j-1]==']' and move_box(i,j-2,dir)):
+                map[i][j-1],map[i][j],map[i][j+1]='[',']','.'            
+                return True          
+    return False
             
 def move_robot(i,j,dir):
     global ri,rj,map
