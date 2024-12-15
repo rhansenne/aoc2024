@@ -3,43 +3,33 @@ import copy
 ri=rj=0 # robot coordinates
 map=[]
 moves=[]
-deltas={'>':(0,1), '<':(0,-1), '^':(-1,0), 'v':(1,0)}
+
+def move_box_vert(i,j,di): # recursively move boxes vertically
+    global map
+    if map[i+di][j]=='#' or map[i+di][j+1]=='#':
+        return False
+    elif map[i+di][j]==']' and map[i+di][j+1]=='[': # two boxes
+        map_before_move=copy.deepcopy(map)                
+        if not (move_box_vert(i+di,j-1,di) and move_box_vert(i+di,j+1,di)):
+            map=map_before_move #undo any moves
+            return False
+    elif map[i+di][j]==']' and not move_box_vert(i+di,j-1,di):
+        return False
+    elif map[i+di][j]=='[' and not move_box_vert(i+di,j,di):
+        return False
+    elif map[i+di][j+1]=='[' and not move_box_vert(i+di,j+1,di):
+        return False                                           
+    map[i][j],map[i][j+1]='.','.'            
+    map[i+di][j],map[i+di][j+1]='[',']'
+    return True              
 
 def move_box(i,j,dir): # recursively move boxes
     global map
     match(dir):
         case '^':
-            if map[i-1][j]=='#' or map[i-1][j+1]=='#':
-                return False
-            elif map[i-1][j]==']' and map[i-1][j+1]=='[': # two boxes
-                map_before_move=copy.deepcopy(map)                
-                if not (move_box(i-1,j-1,dir) and move_box(i-1,j+1,dir)):
-                    map=map_before_move #undo any moves
-                    return False
-            elif map[i-1][j]==']' and not move_box(i-1,j-1,dir):
-                return False
-            elif map[i-1][j]=='[' and not move_box(i-1,j,dir):
-                return False
-            elif map[i-1][j+1]=='[' and not move_box(i-1,j+1,dir):
-                return False                                           
-            map[i][j],map[i][j+1]='.','.'            
-            map[i-1][j],map[i-1][j+1]='[',']'            
+            return move_box_vert(i,j,-1)           
         case 'v':
-            if map[i+1][j]=='#' or map[i+1][j+1]=='#':
-                return False
-            elif map[i+1][j]==']' and map[i+1][j+1]=='[': # two boxes
-                map_before_move=copy.deepcopy(map)                
-                if not (move_box(i+1,j-1,dir) and move_box(i+1,j+1,dir)):
-                    map=map_before_move #undo any moves
-                    return False
-            elif map[i+1][j]==']' and not move_box(i+1,j-1,dir):
-                return False
-            elif map[i+1][j]=='[' and not move_box(i+1,j,dir):
-                return False
-            elif map[i+1][j+1]=='[' and not move_box(i+1,j+1,dir):
-                return False                                           
-            map[i][j],map[i][j+1]='.','.'            
-            map[i+1][j],map[i+1][j+1]='[',']'            
+            return move_box_vert(i,j,1)           
         case '>':
             if map[i][j+2]=='#' or (map[i][j+2]=='[' and not move_box(i,j+2,dir)):
                 return False
@@ -51,7 +41,7 @@ def move_box(i,j,dir): # recursively move boxes
     return True
             
 def move_robot(i,j,dir):
-    global ri,rj
+    global ri,rj,map
     match(dir):
         case '^':
             if map[i-1][j]=='.' or (map[i-1][j]=='[' and move_box(i-1,j,dir)) or (map[i-1][j]==']' and move_box(i-1,j-1,dir)):
