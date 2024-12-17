@@ -43,8 +43,7 @@ for l in open('input.txt', 'r').readlines():
 # easily determine when a certain digit will first appears in any 
 # later position. 
 for i in range(len(prog)):
+    a*=8
     while execute(a,b,c)!=prog[-i-1:]:
         a+=1
-    if i==len(prog)-1:
-        print(a)
-    a*=8
+print(a)
