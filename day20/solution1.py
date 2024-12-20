@@ -6,7 +6,7 @@ def nocheat_times(i,j):
     t=0
     while True:
         t+=1
-        for d in {(0,1),(0,-1),(-1,0),(1,0)}: 
+        for d in {(0,1),(0,-1),(-1,0),(1,0)}:
             i2,j2=i+d[0],j+d[1]
             if map[i2][j2]=='E':
                 times[(i2,j2)]=t
