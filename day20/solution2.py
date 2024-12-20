@@ -26,4 +26,4 @@ for k in range(len(path)):
         cheat_dist=abs(p2[0]-p1[0])+abs(p2[1]-p1[1])
         if cheat_dist <= 20 and nocheat_dist-cheat_dist>=minsavings:
             count+=1
-print(count)            
+print(count)
